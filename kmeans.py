@@ -1,5 +1,13 @@
+import matplotlib
+
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib import pyplot as plt
+import imageio
+
+img = 0
+optimal_img = 0
+final_optimal = -1;
 
 
 # генерация случайных точек
@@ -51,6 +59,7 @@ def find_cluster_mean(points, clusters, k, centroids):
 def dist(p_i, p_j):
     return np.sqrt((p_i[0] - p_j[0]) ** 2 + (p_i[1] - p_j[1]) ** 2)
 
+
 def count_j_c(j_c):
     c_k = len(j_c) - 2
     return (j_c[c_k] - j_c[c_k + 1]) / (j_c[c_k - 1] - j_c[c_k])
@@ -58,6 +67,7 @@ def count_j_c(j_c):
 
 def check(points, centroids, cluster, k):
     global j_c
+    global optimal_img
     x_old = []
     y_old = []
     for i in range(0, len(centroids)):
@@ -91,6 +101,7 @@ def check(points, centroids, cluster, k):
 
 
 def plot(points, centroids, clusters):
+    global img
     clr = np.array(
         ["green", "blue", "yellow", "olive", "pink", "black", "orange", "purple", "beige", "brown", "gray", "cyan",
          "magenta"])
@@ -110,7 +121,12 @@ def plot(points, centroids, clusters):
 
     plt.scatter(points_x, points_y, c=colors)
     plt.scatter(centroids_x, centroids_y, c='red')
-    plt.show()
+    plt.savefig('img/' + str(img) + '.png')
+    if (optimal_found):
+        plt.savefig('img/optimal_found.png')
+
+    # plt.show()
+    img = img + 1
 
 
 def find_nearest(points, centroids):
@@ -139,15 +155,21 @@ if __name__ == '__main__':
     j_c = []
     k_min = 1
     optimal_found = False
-    n = 100
+    n = 200
     points = random_point(n)
     # расчет к средних до нахождения оптимального числа кластеров
     for i in range(1, 10):
-        if optimal_found:
-            break
-        else:
-            kmeans(i, points)
-    plt.plot(range(1, k_optimal + 1), j_c, marker='o')
-    plt.xlabel('Cluster number')
-    plt.ylabel('J(C)')
-    plt.show()
+        kmeans(i, points)
+    kmeans(k_optimal, points)
+    print(k_optimal)
+    # plt.plot(range(1, k_optimal + 1), j_c, marker='o')
+    # plt.xlabel('Cluster number')
+    # plt.ylabel('J(C)')
+    # plt.savefig(str(img) + '.png')
+    # plt.show()
+    # img = img + 1
+
+    images = []
+    for filename in range(0, k_optimal):
+        images.append(imageio.imread('img/' + str(filename) + '.png'))
+    imageio.mimsave('mygif.gif', images)
