@@ -62,14 +62,13 @@ if __name__ == '__main__':
     lines = []
     # самая первая пара точек
     min_distances_list = min_distances.tolist()
-    # нахожу расстония для отрисовки прямых
+    # нахожу минимальное расстояние для отрисовки первой прямой
     min_dist = min(min_distances_list, key=lambda t: t[2])
     first_index = min_dist[0]
     second_index = min_dist[1]
     [first_x, first_y] = points[first_index]
     [second_x, second_y] = points[second_index]
 
-    # отрисовка прямой
     lines.append(plt.plot([first_x, second_x], [first_y, second_y]))
     plt.draw()
     plt.pause(1)
@@ -82,6 +81,7 @@ if __name__ == '__main__':
     print(single_points)
     print(connected_points)
 
+    # отрисовка оставшихся прямых
     while len(single_points) > 0:
         min_distances = np.zeros(len(single_points), dtype=[('x', 'i4'), ('y', 'i4'), ('z', 'f4')])
         for index, point_index in enumerate(single_points):
