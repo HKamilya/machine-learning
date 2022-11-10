@@ -113,6 +113,10 @@ pip-selfcheck.json
 .idea/**/dictionaries
 .idea/**/shelf
 
+.idea
+
+img
+
 # AWS User-specific
 .idea/**/aws.xml
 
